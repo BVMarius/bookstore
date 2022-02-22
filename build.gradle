@@ -1,0 +1,105 @@
+import io.swagger.codegen.v3.CodegenConfigLoader
+import io.swagger.codegen.v3.DefaultGenerator
+import io.swagger.codegen.v3.ClientOptInput
+import io.swagger.codegen.v3.ClientOpts
+import io.swagger.v3.parser.OpenAPIV3Parser
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('io.swagger.codegen.v3:swagger-codegen-maven-plugin:3.0.16')
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.4.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'com.randomhouse'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+ext {
+    apiPackage = 'com.randomhouse.bookstore.controllers.api'
+    modelPackage = 'com.randomhouse.bookstorecontrollers.model'
+    swaggerFile = "${projectDir}/src/main/resources/static/swagger.yaml"
+    swaggerOutput = "${buildDir}/generated/"
+}
+
+task generateServer {
+    doLast {
+        println 'swagger file location is ' + swaggerFile
+        println 'swagger output directory  is ' + swaggerOutput
+        def openAPI = new OpenAPIV3Parser().read(swaggerFile, null, null)
+        def clientOpts = new ClientOptInput().openAPI(openAPI)
+        def codegenConfig = CodegenConfigLoader.forName('spring')
+        codegenConfig.setOutputDir(project.swaggerOutput.toString())
+        clientOpts.setConfig(codegenConfig)
+        def clientOps = new ClientOpts()
+        clientOps.setProperties([
+                'dateLibrary'  : 'java8',
+                'useTags'      : 'true',
+                'interfaceOnly': 'true',
+                'apiPackage'   : project.apiPackage,
+                'modelPackage' : project.modelPackage
+        ])
+        clientOpts.setOpts(clientOps)
+
+        def generator = new DefaultGenerator().opts(clientOpts)
+        generator.generate()
+    }
+}
+
+clean.doFirst {
+    delete("${project.swaggerOutput}")
+}
+
+sourceSets {
+    generated {
+        compileClasspath = configurations.generatedCompile
+    }
+    main {
+        java {
+            srcDir "${project.swaggerOutput}/src/main/java"
+                  }
+        compileClasspath += generated.output
+        runtimeClasspath += generated.output
+    }
+    test {
+        compileClasspath += generated.output
+        runtimeClasspath += generated.output
+    }
+}
+
+compileJava.dependsOn('generateServer')
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation("org.springdoc:springdoc-openapi-ui:1.4.6")
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
+    compile group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.1.4'
+    compileOnly "org.springframework.boot:spring-boot-devtools"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
