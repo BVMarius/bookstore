@@ -1,17 +1,15 @@
 package com.randomhouse.bookstore.controllers.impl;
 
 import com.randomhouse.bookstore.controllers.api.BookApi;
-import io.swagger.annotations.ApiParam;
+import com.randomhouse.bookstorecontrollers.model.Book;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BooksController implements BookApi {
 
-public ResponseEntity<Void> getApiBookBookId(
+public ResponseEntity<Book> getApiBookBookId(
         String authorization
         ,  String bookId
 ) {
