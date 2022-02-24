@@ -33,7 +33,7 @@ paths:
               examples:
                 Updated User Rebecca Baker:
                   value:
-                    id: 13
+                    id: a40860f8-d9c9-4c3b-b9cc-b87464601f11
                     firstName: Rebecca
                     lastName: Baker
                     email: rebecca@gmail.com
@@ -78,8 +78,8 @@ paths:
       responses:
         '200':
           description: OK
-    tags:
-      - customer
+      tags:
+        - customer
     put:
       summary: ''
       operationId: put-customer-userId
@@ -124,7 +124,7 @@ paths:
               examples:
                 Updated User Rebecca Baker:
                   value:
-                    id: 13
+                    id: a40860f8-d9c9-4c3b-b9cc-b87464601f11
                     firstName: Rebecca
                     lastName: Baker
                     email: rebecca@gmail.com
@@ -214,6 +214,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
         '401':
           description: Unauthorized
         '404':
@@ -282,23 +286,30 @@ paths:
           required: true
       tags:
         - book
+  /api/books:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AListOfBooks'
+              examples: {}
+      operationId: get-api-books
 components:
   schemas:
     User:
       title: User
-      description: ''
-      examples:
-        - id: string
-          firstName: string
-          lastName: string
-          email: string
-          userType: USER
-        - id: string
-          firstName: string
-          lastName: string
-          email: string
-          userType: USER
-      type: object
+      description: Description of an user
+      example:
+        id: string
+        firstName: string
+        lastName: string
+        email: string
+        userType: USER
       properties:
         id:
           type: string
@@ -338,9 +349,24 @@ components:
           type: integer
         isbn:
           type: string
-      examples:
-        - id: string
-          name: string
-          type: FICTION
-          price: 0
-          isbn: string
+        authors:
+          description: The book authors
+          items:
+            $ref: '#/components/schemas/Author'
+          type: array
+    Author:
+      title: Author
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+    AListOfBooks:
+      title: A list of books
+      properties:
+        items:
+          $ref: '#/components/schemas/Book'
+        type: array
