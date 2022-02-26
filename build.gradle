@@ -97,6 +97,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.10.4'
+    implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.4.6'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
     compile group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.1.4'

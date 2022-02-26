@@ -10,7 +10,7 @@ tags:
   - name: book
     description: Endpoints related with books
   - name: customer
-    description: Endpoints related with customer
+    description: Endpoints related with customers
 paths:
   '/api/customer/{userId}':
     parameters:
@@ -21,7 +21,7 @@ paths:
         required: true
         description: The id of the user
     patch:
-      summary: Update User Information
+      summary: 'Update User Information'
       operationId: patch-users-userId
       responses:
         '200':
@@ -81,7 +81,7 @@ paths:
       tags:
         - customer
     put:
-      summary: ''
+      summary: 'Update a customer by id'
       operationId: put-customer-userId
       responses:
         '200':
@@ -96,7 +96,7 @@ paths:
       tags:
         - customer
     get:
-      summary: ''
+      summary: 'Retrive a user by id'
       operationId: get-api-customer-userId
       responses:
         '200':
@@ -112,7 +112,7 @@ paths:
         in: path
         required: true
     patch:
-      summary: Update User Information
+      summary: Update Book Information
       operationId: patch-api-book-bookId
       responses:
         '200':
@@ -233,8 +233,8 @@ paths:
   /api/customer:
     parameters: []
     post:
-      summary: ''
-      operationId: post-customer-userId
+      summary: 'Create a customer'
+      operationId: create-customer
       responses:
         '201':
           description: Created
@@ -264,7 +264,7 @@ paths:
   /api/book:
     parameters: []
     post:
-      summary: ''
+      summary: 'Add a book to the application'
       operationId: post-book
       responses:
         '201':
@@ -288,8 +288,9 @@ paths:
         - book
   /api/books:
     get:
-      summary: Your GET endpoint
-      tags: []
+      summary: Retrive all books
+      tags:
+        - book
       responses:
         '200':
           description: OK
@@ -297,7 +298,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AListOfBooks'
-              examples: {}
       operationId: get-api-books
 components:
   schemas:
@@ -322,8 +322,8 @@ components:
         userType:
           type: string
           enum:
-            - USER
-            - ADMIN
+            - user
+            - admin
         password:
           type: string
     Book:
@@ -365,8 +365,14 @@ components:
         lastName:
           type: string
     AListOfBooks:
-      title: A list of books
       properties:
-        items:
-          $ref: '#/components/schemas/Book'
-        type: array
+        books:
+          description: List of books
+          items:
+            $ref: '#/components/schemas/Book'
+          type: array
+      required:
+        - books
+      title: A list of books
+      type: object
+
