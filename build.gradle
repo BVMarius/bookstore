@@ -92,6 +92,7 @@ compileJava.dependsOn('generateServer')
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.auth0:java-jwt:3.13.0'
     implementation("org.springdoc:springdoc-openapi-ui:1.4.6")
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

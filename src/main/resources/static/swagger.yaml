@@ -29,7 +29,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserRequest'
               examples:
                 Updated User Rebecca Baker:
                   value:
@@ -120,7 +120,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserRequest'
               examples:
                 Updated User Rebecca Baker:
                   value:
@@ -244,7 +244,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
             examples: {}
         description: ''
       tags:
@@ -256,9 +256,18 @@ paths:
       operationId: post-profile
       responses:
         '201':
-          description: Created
+          description: Authorization response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
         '401':
           description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
       tags:
         - profile
   /api/book:
@@ -301,7 +310,7 @@ paths:
       operationId: get-api-books
 components:
   schemas:
-    User:
+    UserRequest:
       title: User
       description: Description of an user
       example:
@@ -364,6 +373,22 @@ components:
           type: string
         lastName:
           type: string
+    LoginRequest:
+      title: Login data
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    LoginResponse:
+      title: Authentification data
+      type: object
+      properties:
+        token:
+          type: string
+        token-type:
+          type: string
     AListOfBooks:
       properties:
         books:
@@ -375,4 +400,53 @@ components:
         - books
       title: A list of books
       type: object
-
+    NotFoundResponse:
+      description: A not found error reponse
+      properties:
+        code:
+          description: 'Specific error code'
+          type: string
+        detail:
+          description: 'Error detail'
+          type: string
+      type: object
+      title: NotFoundResponse
+    ServiceUnavailableError:
+      description: An error code when depended service is down
+      properties:
+        code:
+          description: 'Specific error code'
+          type: string
+        detail:
+          description: 'Error detail'
+          type: string
+      type: object
+      title: ServiceUnavailableError
+    UnauthorizedError:
+      description: An error code when the client is not authorized to access the resource
+      properties:
+        code:
+          description: 'Specific error code'
+          type: string
+        detail:
+          description: 'Error detail'
+          type: string
+      type: object
+      title: UnauthorizedError
+    ValidationError:
+      description: An error when
+      example:
+        code: invalid_type
+        detail: is invalid
+      properties:
+        code:
+          description: Code representing reason for error
+          type: string
+        detail:
+          description: Error detail
+          nullable: true
+          type: string
+      required:
+        - code
+      title: ValidationError
+      type: object

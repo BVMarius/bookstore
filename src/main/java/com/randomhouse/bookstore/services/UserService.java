@@ -4,6 +4,7 @@ import com.randomhouse.bookstore.entities.UserEntity;
 
 public interface UserService {
 
-    public void createUser(UserEntity userEntity);
+     void createUser(UserEntity userEntity);
+     String getToken(String email, String password);
 
 }
