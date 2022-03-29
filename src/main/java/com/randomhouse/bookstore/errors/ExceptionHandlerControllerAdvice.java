@@ -2,6 +2,7 @@ package com.randomhouse.bookstore.errors;
 
 import com.randomhouse.bookstore.exceptions.AuthorizationException;
 import com.randomhouse.bookstore.exceptions.BadRequestBodyException;
+import com.randomhouse.bookstore.exceptions.UnprocessableEntityException;
 import com.randomhouse.bookstorecontrollers.model.ValidationError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,5 +31,12 @@ public class ExceptionHandlerControllerAdvice {
         return new ResponseEntity<>(validationError, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public ResponseEntity<ValidationError>handle(UnprocessableEntityException exception){
+        ValidationError validationError = new ValidationError();
+        validationError.detail(exception.getMessage()+" "+exception.getDetail());
+        validationError.code(exception.getCode());
+        return new ResponseEntity<>(validationError, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 
 }

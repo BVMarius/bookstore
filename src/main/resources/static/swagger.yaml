@@ -11,6 +11,8 @@ tags:
     description: Endpoints related with books
   - name: customer
     description: Endpoints related with customers
+  - name: author
+    description: Endpoints related with authors
 paths:
   '/api/customer/{userId}':
     parameters:
@@ -308,6 +310,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/AListOfBooks'
       operationId: get-api-books
+  /api/author:
+    parameters: []
+    post:
+      summary: 'Add an author to the application'
+      operationId: post-author
+      responses:
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+            examples: {}
+        description: ''
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+      tags:
+        - author
 components:
   schemas:
     UserRequest:

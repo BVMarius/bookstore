@@ -1,3 +1,5 @@
+
+
 CREATE TABLE if not exists "public"."users"
 (
    id uuid PRIMARY KEY NOT NULL,
@@ -9,7 +11,7 @@ CREATE TABLE if not exists "public"."users"
    password varchar(255),
    user_type varchar(255) DEFAULT 'user'::character varying NOT NULL
 );
-CREATE UNIQUE INDEX users_email_index ON "public"."users"(email);
+CREATE UNIQUE INDEX if not exists users_email_index ON "public"."users"(email);
 
 CREATE TABLE if not exists "public"."books"
 (
@@ -21,7 +23,7 @@ CREATE TABLE if not exists "public"."books"
    inserted_at timestamp NOT NULL,
    updated_at timestamp NOT NULL
 );
-CREATE UNIQUE INDEX books_id_index ON "public"."books"(id);
+CREATE UNIQUE INDEX if not exists books_id_index ON "public"."books"(id);
 
 CREATE TABLE if not exists "public"."authors"
 (
@@ -29,6 +31,6 @@ CREATE TABLE if not exists "public"."authors"
    first_name varchar(255),
    last_name varchar(255)
 );
-CREATE UNIQUE INDEX authors_id_index ON "public".authors(id);
+CREATE UNIQUE INDEX if not exists authors_id_index ON "public".authors(id);
 
 
